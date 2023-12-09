@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import Link from 'next/link';
 
 import { InputField } from '@/app/components/input-field'
@@ -20,6 +20,12 @@ export const RoomConnectionForm = () => {
     setValues({ ...values, [name]: value });
   }
 
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const isDisabled = Object.values(values).some(value => !value);
+
+    if (isDisabled) event.preventDefault();
+  }
+
   return (
     <>
       <h1 className={styles.heading}>Join</h1>
@@ -30,7 +36,7 @@ export const RoomConnectionForm = () => {
         <div className={styles.group}>
           <InputField value={values[ROOM]} name="room" placeholder="Room" handleChange={handleChange} required />
         </div>
-        <Link href={`/chat?room=${values[NAME]}&room=${values[ROOM]}`}>
+        <Link onClick={handleClick} href={`/chat?name=${values[NAME]}&room=${values[ROOM]}`}>
           <button className={styles.buttonJoin}>
             Sign in
           </button>

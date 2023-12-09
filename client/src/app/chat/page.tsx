@@ -1,12 +1,19 @@
-import React from 'react';
+'use client'
+import React, { memo, useEffect } from 'react';
+import { socket } from '@/services/socketManager';
 
-const Chat = () => {
-  console.log(123)
+const Chat = memo((props) => {
+  const searchParams = props.searchParams;
+
+  useEffect(() => {
+    socket.emit('join', searchParams);
+  }, []);
+
   return (
     <div>
       room
     </div>
   );
-};
+});
 
 export default Chat;
