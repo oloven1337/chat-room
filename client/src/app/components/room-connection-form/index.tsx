@@ -31,10 +31,24 @@ export const RoomConnectionForm = () => {
       <h1 className={styles.heading}>Join</h1>
       <form className={styles.form}>
         <div className={styles.group}>
-          <InputField value={values[NAME]} name="name" placeholder="Username" handleChange={handleChange} required />
+          <InputField
+            type="text"
+            value={values[NAME]}
+            name="name"
+            placeholder="Username"
+            handleChange={handleChange}
+            required
+          />
         </div>
         <div className={styles.group}>
-          <InputField value={values[ROOM]} name="room" placeholder="Room" handleChange={handleChange} required />
+          <InputField
+            type="text"
+            value={values[ROOM]}
+            name="room"
+            placeholder="Room"
+            handleChange={handleChange}
+            required
+          />
         </div>
         <Link onClick={handleClick} href={`/chat?name=${values[NAME]}&room=${values[ROOM]}`}>
           <button className={styles.buttonJoin}>
