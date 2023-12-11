@@ -21,7 +21,25 @@ const addUser = (user) => {
     return { isExist: !!isExist, user: currentUser };
 };
 
+const removeUser = (user) => {
+    const found = findUser(user);
+
+    if (found) {
+        const updatedUsers = users.filter(
+            ({ room, name }) => room === found.room && name !== found.name
+        );
+
+        users.splice(0, users.length, ...updatedUsers);
+
+        return found;
+    }
+
+    return null;
+};
+
 module.exports = {
     addUser,
-    findUser
+    findUser,
+    removeUser,
+    users
 }

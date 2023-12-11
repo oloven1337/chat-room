@@ -3,6 +3,7 @@ import React, { memo, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { io } from 'socket.io-client';
 import EmojiPicker from 'emoji-picker-react';
+import { useRouter } from 'next/navigation'
 
 import { InputField } from '@/app/components/input-field';
 import { Messages } from '@/app/components/messages';
@@ -11,6 +12,7 @@ import unicorn from '../../images/unicorn.png';
 import styles from './chat.module.css';
 
 const Chat = memo((props) => {
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const [messageValue, setMessageValue] = useState('');
   const [isOpenEmojis, setOpenEmojis] = useState(false);
@@ -26,7 +28,11 @@ const Chat = memo((props) => {
   };
 
   const leftRoom = () => {
+    socket.emit('leftRoom', {
+      params: searchParams
+    })
 
+    router.push('/');
   };
 
   const handleChange = ({ target: { value } }) => {
@@ -57,9 +63,6 @@ const Chat = memo((props) => {
     <div className={styles.wrap}>
       <div className={styles.header}></div>
       <div className={styles.title}>{searchParams.room}</div>
-      <div className='{styles.users}'>
-        0 users in this room
-      </div>
       <button className={styles.left} onClick={leftRoom}>
         Left the room
       </button>

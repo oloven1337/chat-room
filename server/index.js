@@ -4,7 +4,7 @@ const cors = require('cors');
 const { Server} = require('socket.io');
 
 const route = require('./route.js');
-const { addUser, findUser } = require('./users');
+const { addUser, findUser, removeUser } = require('./users');
 
 const app = express();
 
@@ -21,14 +21,17 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     socket.on('join', ({ name, room }) => {
+        const { user, isExist } = addUser({ name, room });
         socket.join(room);
 
-        const { user } = addUser({ name, room });
+        const userMessage = isExist
+            ? `${user.name}, here you go again`
+            : `Hey ${user.name}`;
 
         socket.emit('message', {
             data: {
                 user: 'Admin',
-                message: `Hey ${user.name}`
+                message: userMessage
             }
         });
 
@@ -50,6 +53,22 @@ io.on('connection', (socket) => {
                     message: messageValue
                 }
             })
+        }
+    })
+
+    socket.on('leftRoom', ({ params }) => {
+        const user = removeUser(params);
+
+        if (user) {
+            const {room, name} = user;
+
+            io.to(room).emit(
+                'message', {
+                    data: {
+                        user: {name: 'Admin'},
+                        message: `${name} has left`
+                    }
+                })
         }
     })
 
